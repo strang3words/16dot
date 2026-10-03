@@ -78,13 +78,17 @@ i8 instr_1op(struct cpu *cpu, u8 nib1, u8 nib2, u8 nib3)
 
 i8 instr_ldl(struct cpu *cpu, u8 nib1, u8 nib2, u8 nib3)
 {
-	log_info("TODO(ldl)\n");
+	if (nib1 == 0) return 0;
+	u8 imm8 = (nib2 << 4) | nib3;
+	cpu->reg[nib1] = (cpu->reg[nib1] & 0xFF00) | (u16)imm8;
 	return 0;
 }
 
 i8 instr_ldu(struct cpu *cpu, u8 nib1, u8 nib2, u8 nib3)
 {
-	log_info("TODO(ldu)\n");
+	if (nib1 == 0) return 0;
+	u8 imm8 = (nib2 << 4) | nib3;
+	cpu->reg[nib1] = (cpu->reg[nib1] & 0x00FF) | ((u16)imm8 << 8);
 	return 0;
 }
 
@@ -110,7 +114,7 @@ i8 instr_jmp(struct cpu *cpu, u8 nib1, u8 nib2, u8 nib3)
 {
 	u16 pc = ((nib1 & 0xF) << 8) | ((nib2 & 0xF) << 4) | (nib3 & 0xF);
 	cpu->reg[REG_PC] += pc;
-	(void)n;
+	(void)pc;
 	return 0;
 }
 
