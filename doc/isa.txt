@@ -50,9 +50,9 @@ immediate instructions:
 control instructions:
 [u4 0xA][u8 unused][u4 subop]
 0x0 hlt - flip running bit off
-0x1 sys - flip priveldge bit, save pc to xpc and jump to kernel syscall vector
-0x2 xrt - exclusive return to pc saved in xpc and flip priveldge bit
-0x3 trp - flip priveldge bit, save pc to xpc and jump to kernel trap vector
+0x1 sys - flip priveldge bit on, save pc to xpc and jump to kernel syscall vector
+0x2 xrt - exclusive return to pc saved in xpc and flip priveldge bit off
+0x3 trp - flip priveldge bit on, save pc to xpc and jump to kernel trap vector
 0x4 nnt - flip interrupt bit off, disallowing interrupts
 0x5 int - flip interrupt bit on, allowing interrupts
 0x6 dbi - dump debug info
@@ -89,5 +89,14 @@ other registers:
 0XE: s1 - ..
 0XF: s2 - ..
 
--- vectors:
-// TODO
+-- mem layout:
+[0x0000 - 0x07FF] BIOS ROM
+[0x0800 - 0x081F] kernel vector table 
+[0x0820 - 0x08FF] kernel text 
+[0x0900 - 0xEFFF] general purpose heap 
+[0xF000 - 0xFFFF] kernel stack
+
+-- kernel vector table:
+[0x0800 - 0x0807] sys
+[0x0808 - 0x080F] trp
+[0x0810 - 0x0817] brk
